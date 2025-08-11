@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API - Lab 8</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .api-section {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .endpoint {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 4px solid #007bff;
+        }
+        .method {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .url {
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .response {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success {
+            border-left: 4px solid #28a745;
+        }
+        .error {
+            border-left: 4px solid #dc3545;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test API - Lab 8 RESTful API</h1>
+        <p>Server: <span class="url">http://localhost:8000</span></p>
+    </div>
+
+    <!-- Products API -->
+    <div class="container">
+        <h2>📦 Products API</h2>
+        
+        <div class="api-section">
+            <h3>1. Lấy danh sách sản phẩm</h3>
+            <div class="endpoint">
+                <span class="method">GET</span> <span class="url">/api/products</span>
+            </div>
+            <button onclick="testGetProducts()">Test GET Products</button>
+            <div id="products-response" class="response"></div>
+        </div>
+
+        <div class="api-section">
+            <h3>2. Tạo sản phẩm mới</h3>
+            <div class="endpoint">
+                <span class="method">POST</span> <span class="url">/api/products</span>
+            </div>
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" id="product-name" value="Test Product">
+            </div>
+            <div class="form-group">
+                <label>Description:</label>
+                <textarea id="product-description">This is a test product</textarea>
+            </div>
+            <div class="form-group">
+                <label>Price:</label>
+                <input type="number" id="product-price" value="99.99" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Quantity:</label>
+                <input type="number" id="product-quantity" value="10">
+            </div>
+            <div class="form-group">
+                <label>Image:</label>
+                <input type="text" id="product-image" value="test.jpg">
+            </div>
+            <button onclick="testCreateProduct()">Test POST Product</button>
+            <div id="create-product-response" class="response"></div>
+        </div>
+
+        <div class="api-section">
+            <h3>3. Lấy chi tiết sản phẩm</h3>
+            <div class="endpoint">
+                <span class="method">GET</span> <span class="url">/api/products/{id}</span>
+            </div>
+            <div class="form-group">
+                <label>Product ID:</label>
+                <input type="number" id="product-id" value="1">
+            </div>
+            <button onclick="testGetProduct()">Test GET Product</button>
+            <div id="get-product-response" class="response"></div>
+        </div>
+
+        <div class="api-section">
+            <h3>4. Cập nhật sản phẩm</h3>
+            <div class="endpoint">
+                <span class="method">PUT</span> <span class="url">/api/products/{id}</span>
+            </div>
+            <div class="form-group">
+                <label>Product ID:</label>
+                <input type="number" id="update-product-id" value="1">
+            </div>
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" id="update-product-name" value="Updated Product">
+            </div>
+            <div class="form-group">
+                <label>Price:</label>
+                <input type="number" id="update-product-price" value="149.99" step="0.01">
+            </div>
+            <button onclick="testUpdateProduct()">Test PUT Product</button>
+            <div id="update-product-response" class="response"></div>
+        </div>
+
+        <div class="api-section">
+            <h3>5. Xóa sản phẩm</h3>
+            <div class="endpoint">
+                <span class="method">DELETE</span> <span class="url">/api/products/{id}</span>
+            </div>
+            <div class="form-group">
+                <label>Product ID:</label>
+                <input type="number" id="delete-product-id" value="1">
+            </div>
+            <button onclick="testDeleteProduct()">Test DELETE Product</button>
+            <div id="delete-product-response" class="response"></div>
+        </div>
+    </div>
+
+    <!-- LoaiSanPham API -->
+    <div class="container">
+        <h2>🏷️ LoaiSanPham API</h2>
+        
+        <div class="api-section">
+            <h3>1. Lấy danh sách loại sản phẩm</h3>
+            <div class="endpoint">
+                <span class="method">GET</span> <span class="url">/api/loaisanpham</span>
+            </div>
+            <button onclick="testGetLoaiSanPham()">Test GET LoaiSanPham</button>
+            <div id="loaisanpham-response" class="response"></div>
+        </div>
+
+        <div class="api-section">
+            <h3>2. Tạo loại sản phẩm mới</h3>
+            <div class="endpoint">
+                <span class="method">POST</span> <span class="url">/api/loaisanpham</span>
+            </div>
+            <div class="form-group">
+                <label>Tên loại:</label>
+                <input type="text" id="loai-name" value="Test Category">
+            </div>
+            <div class="form-group">
+                <label>Mô tả:</label>
+                <textarea id="loai-description">This is a test category</textarea>
+            </div>
+            <div class="form-group">
+                <label>Hình ảnh:</label>
+                <input type="text" id="loai-image" value="test-category.jpg">
+            </div>
+            <button onclick="testCreateLoaiSanPham()">Test POST LoaiSanPham</button>
+            <div id="create-loai-response" class="response"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000/api';
+
+        function showResponse(elementId, data, isSuccess = true) {
+            const element = document.getElementById(elementId);
+            element.textContent = JSON.stringify(data, null, 2);
+            element.className = 'response ' + (isSuccess ? 'success' : 'error');
+        }
+
+        async function makeRequest(url, options = {}) {
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                });
+                
+                const data = await response.json();
+                return { success: response.ok, data, status: response.status };
+            } catch (error) {
+                return { success: false, data: { error: error.message }, status: 0 };
+            }
+        }
+
+        // Products API Tests
+        async function testGetProducts() {
+            const result = await makeRequest(`${API_BASE}/products`);
+            showResponse('products-response', result.data, result.success);
+        }
+
+        async function testCreateProduct() {
+            const productData = {
+                name: document.getElementById('product-name').value,
+                description: document.getElementById('product-description').value,
+                price: parseFloat(document.getElementById('product-price').value),
+                quantity: parseInt(document.getElementById('product-quantity').value),
+                image: document.getElementById('product-image').value,
+                is_active: true
+            };
+
+            const result = await makeRequest(`${API_BASE}/products`, {
+                method: 'POST',
+                body: JSON.stringify(productData)
+            });
+            showResponse('create-product-response', result.data, result.success);
+        }
+
+        async function testGetProduct() {
+            const id = document.getElementById('product-id').value;
+            const result = await makeRequest(`${API_BASE}/products/${id}`);
+            showResponse('get-product-response', result.data, result.success);
+        }
+
+        async function testUpdateProduct() {
+            const id = document.getElementById('update-product-id').value;
+            const productData = {
+                name: document.getElementById('update-product-name').value,
+                price: parseFloat(document.getElementById('update-product-price').value),
+                is_active: true
+            };
+
+            const result = await makeRequest(`${API_BASE}/products/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify(productData)
+            });
+            showResponse('update-product-response', result.data, result.success);
+        }
+
+        async function testDeleteProduct() {
+            const id = document.getElementById('delete-product-id').value;
+            const result = await makeRequest(`${API_BASE}/products/${id}`, {
+                method: 'DELETE'
+            });
+            showResponse('delete-product-response', result.data, result.success);
+        }
+
+        // LoaiSanPham API Tests
+        async function testGetLoaiSanPham() {
+            const result = await makeRequest(`${API_BASE}/loaisanpham`);
+            showResponse('loaisanpham-response', result.data, result.success);
+        }
+
+        async function testCreateLoaiSanPham() {
+            const loaiData = {
+                ten_loai: document.getElementById('loai-name').value,
+                mo_ta: document.getElementById('loai-description').value,
+                hinh_anh: document.getElementById('loai-image').value,
+                trang_thai: true
+            };
+
+            const result = await makeRequest(`${API_BASE}/loaisanpham`, {
+                method: 'POST',
+                body: JSON.stringify(loaiData)
+            });
+            showResponse('create-loai-response', result.data, result.success);
+        }
+
+        // Auto-test on page load
+        window.onload = function() {
+            console.log('API Test Page Loaded');
+            console.log('Make sure Laravel server is running on http://localhost:8000');
+        };
+    </script>
+</body>
+</html>
